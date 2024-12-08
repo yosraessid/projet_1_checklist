@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom"; // For navigation between routes
 import './App.css'; // CSS for styling the component
 import logo from "./assets/logo.png"; // Logo asset for the header
 import login from "./login"; 
+import ApiRequestComponent from "./ApiRequestComponent";
 // Dashboard component definition
 const Dashboard = () => {
   // Initialize navigation hook for programmatic navigation
