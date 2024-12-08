@@ -1,59 +1,60 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Qs from 'qs'; // Assurez-vous que Qs est installé via `npm install qs`
+import Qs from 'qs'; // Make sure Qs is installed via `npm install qs`
 
 const ApiRequestComponent = () => {
-  const [response, setResponse] = useState(null); // État pour stocker la réponse de l'API
-  const [error, setError] = useState(null); // État pour stocker les erreurs éventuelles
-  const [isLoading, setIsLoading] = useState(true); // État pour indiquer le chargement
-  const token = "1aefe8117c4401c4f3b60faec61085d0853ee634"; // Token d'authentification
+  const [response, setResponse] = useState(null); // State to store the API response
+  const [error, setError] = useState(null); // State to store any potential errors
+  const [isLoading, setIsLoading] = useState(true); // State to indicate loading status
+  const token = "1aefe8117c4401c4f3b60faec61085d0853ee634"; // Authentication token
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await axios({
-          url: '/ping', // URL spécifique de l'API
+          url: '/ping', // Specific API endpoint URL
           method: 'get',
-          baseURL: 'https://greenvelvet.alwaysdata.net/pfc', // Base URL de l'API
+          baseURL: 'https://greenvelvet.alwaysdata.net/pfc', // Base URL of the API
           headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            Authorization: `Bearer ${token}`, // Ajout du token dans les headers
+            Authorization: `Bearer ${token}`, // Add the token to the headers
           },
-          params: { ID: 12345 }, // Exemple de paramètre (ajustez selon vos besoins)
+          params: { ID: 12345 }, // Example parameter (adjust as needed)
           paramsSerializer: params => Qs.stringify(params, { arrayFormat: 'brackets' }),
-          timeout: 3000, // Timeout augmenté pour assurer une marge suffisante
+          timeout: 3000, // Increased timeout for sufficient margin
           responseType: 'json',
         });
 
-        // Stocker la réponse dans l'état
+        // Store the response in the state
         setResponse(result.data);
       } catch (err) {
-        // Stocker l'erreur dans l'état
+        // Store the error in the state
         setError(err.response?.data?.message || err.message);
       } finally {
-        // Désactiver le chargement
+        // Disable the loading state
         setIsLoading(false);
       }
     };
 
-    fetchData(); // Appel de la fonction de récupération des données
+    fetchData(); // Call the data fetching function
   }, []);
 
   return (
     <div>
       <h1>API Request Example</h1>
       {isLoading ? (
-        <p>Loading...</p>
+        <p>Loading...</p> // Show a loading message while the data is being fetched
       ) : error ? (
-        <p style={{ color: 'red' }}>Error: {error}</p>
+        <p style={{ color: 'red' }}>Error: {error}</p> // Display an error message if an error occurs
       ) : (
-        <pre>{JSON.stringify(response, null, 2)}</pre>
+        <pre>{JSON.stringify(response, null, 2)}</pre> // Render the API response
       )}
     </div>
   );
 };
 
 export default ApiRequestComponent;
+
 
 
 
