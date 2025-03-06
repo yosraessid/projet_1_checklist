@@ -1,0 +1,19 @@
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.html$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule . /index.html [L]
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Set base URL
+RewriteCond %{HTTP_HOST} !^multimédiateams03\.com$ [NC]
+RewriteRule ^(.*)$ https://multimédiateams03.com/$1 [L,R=301]
+
+# Headers
+Header set Access-Control-Allow-Origin "https://multimédiateams03.com"
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains" 
