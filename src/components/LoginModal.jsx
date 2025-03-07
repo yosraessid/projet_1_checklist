@@ -1,11 +1,20 @@
+
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import PropTypes from 'prop-types';
 import '../App.css';
 
 function LoginModal({ onClose, onLogin }) {
+  /**
+   * États locaux pour gérer les champs du formulaire
+   */
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  /**
+   * Gère la soumission du formulaire de connexion
+   * @param {Event} e - L'événement de soumission du formulaire
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
     onLogin({ email, password });
@@ -14,6 +23,7 @@ function LoginModal({ onClose, onLogin }) {
   return (
     <div className="modal-overlay">
       <div className="login-modal">
+        {/* En-tête de la modale */}
         <div className="modal-header">
           <h2 className="modal-title">Se connecter</h2>
           <button onClick={onClose} className="close-button">
@@ -21,7 +31,9 @@ function LoginModal({ onClose, onLogin }) {
           </button>
         </div>
 
+        {/* Formulaire de connexion */}
         <form onSubmit={handleSubmit} className="login-form">
+          {/* Champ email avec aide */}
           <div className="form-group">
             <label className="form-label">Email</label>
             <input
@@ -37,6 +49,7 @@ function LoginModal({ onClose, onLogin }) {
             </small>
           </div>
 
+          {/* Champ mot de passe */}
           <div className="form-group">
             <label className="form-label">Mot de passe</label>
             <input
@@ -49,6 +62,7 @@ function LoginModal({ onClose, onLogin }) {
             />
           </div>
 
+          {/* Boutons d'action */}
           <div className="modal-actions">
             <button type="button" onClick={onClose} className="cancel-button">
               Annuler
@@ -62,5 +76,11 @@ function LoginModal({ onClose, onLogin }) {
     </div>
   );
 }
+
+// Validation des props avec PropTypes
+LoginModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onLogin: PropTypes.func.isRequired
+};
 
 export default LoginModal; 

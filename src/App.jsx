@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Plus, Search, Users, Calendar, CheckSquare, X } from 'lucide-react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
@@ -8,6 +9,10 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import './App.css';
 
+/**
+ * Données de démonstration pour les projets
+ * @constant {Array} MOCK_PROJECTS
+ */
 const MOCK_PROJECTS = [
   {
     id: '1',
@@ -59,8 +64,11 @@ const MOCK_PROJECTS = [
   },
 ];
 
+
 function App() {
   const navigate = useNavigate();
+  
+  // États pour gérer les données de l'application
   const [searchTerm, setSearchTerm] = useState('');
   const [projects, setProjects] = useState(() => {
     const savedProjects = localStorage.getItem('projects');
@@ -68,14 +76,22 @@ function App() {
   });
   const [isNewProjectModalOpen, setIsNewProjectModalOpen] = useState(false);
 
+  /**
+   * Effet pour sauvegarder les projets dans le localStorage
+   */
   useEffect(() => {
     localStorage.setItem('projects', JSON.stringify(projects));
   }, [projects]);
 
+ 
   const handleProjectClick = (project) => {
     navigate(`/project/${project.id}`);
   };
 
+  /**
+   * Met à jour un projet existant
+   * @param {Object} updatedProject - Le projet avec les modifications
+   */
   const handleUpdateProject = (updatedProject) => {
     setProjects(projects.map(p => 
       p.id === updatedProject.id ? updatedProject : p
@@ -83,11 +99,19 @@ function App() {
     setIsNewProjectModalOpen(false);
   };
 
+  /**
+   * Supprime un projet
+   * @param {string} projectId - L'identifiant du projet à supprimer
+   */
   const handleDeleteProject = (projectId) => {
     setProjects(projects.filter(p => p.id !== projectId));
     navigate('/');
   };
 
+  /**
+   * Crée un nouveau projet
+   * @param {Object} newProject - Les données du nouveau projet
+   */
   const handleCreateProject = (newProject) => {
     if (!newProject.title || !newProject.description) {
       alert('Please fill in all required fields');
@@ -108,10 +132,17 @@ function App() {
     setIsNewProjectModalOpen(false);
   };
 
+  /**
+   * Met à jour le terme de recherche
+   * @param {Event} e - L'événement de changement de l'input
+   */
   const handleSearch = (e) => {
     setSearchTerm(e.target.value);
   };
 
+  /**
+   * Filtre les projets en fonction du terme de recherche
+   */
   const filteredProjects = projects.filter(project => {
     const searchLower = searchTerm.toLowerCase();
     return (
@@ -128,8 +159,10 @@ function App() {
       <Navbar />
       
       <Routes>
+        {/* Page d'accueil avec la liste des projets */}
         <Route path="/" element={
           <div className="home-container">
+            {/* En-tête avec titre et bouton nouveau projet */}
             <div className="header-section">
               <h1 className="page-title">Groupes de Travail</h1>
               <button 
@@ -141,6 +174,7 @@ function App() {
               </button>
             </div>
 
+            {/* Barre de recherche */}
             <div className="search-section">
               <div className="search-wrapper">
                 <Search className="search-icon" size={20} />
@@ -160,6 +194,7 @@ function App() {
                   </button>
                 )}
               </div>
+              {/* Affichage du nombre de résultats */}
               {searchTerm && (
                 <div className="search-results">
                   <span className="results-count">
@@ -169,6 +204,7 @@ function App() {
               )}
             </div>
 
+            {/* Grille des projets */}
             <div className="project-grid">
               {filteredProjects.map((project, index) => (
                 <div 
@@ -180,6 +216,7 @@ function App() {
                   <h3 className="project-title">{project.title}</h3>
                   <p className="project-description">{project.description}</p>
                   
+                  {/* Métadonnées du projet */}
                   <div className="project-meta">
                     <div className="meta-item">
                       <Users size={16} />
@@ -197,6 +234,7 @@ function App() {
                     </div>
                   </div>
 
+                  {/* Liste des membres du projet */}
                   <div className="project-members">
                     {project.members.slice(0, 4).map((member) => (
                       <img
@@ -218,6 +256,7 @@ function App() {
           </div>
         } />
 
+        {/* Route pour les détails d'un projet */}
         <Route 
           path="/project/:id" 
           element={
@@ -231,6 +270,7 @@ function App() {
         />
       </Routes>
 
+      {/* Modal de création de projet */}
       {isNewProjectModalOpen && (
         <NewProjectModal
           onClose={() => setIsNewProjectModalOpen(false)}

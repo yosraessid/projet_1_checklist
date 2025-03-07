@@ -1,33 +1,53 @@
+
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { X, Plus, Trash2, UserPlus, ArrowLeft, Search } from 'lucide-react';
+import { X, Plus, Trash2, UserPlus, Search } from 'lucide-react';
+import PropTypes from 'prop-types';
 import '../App.css';
+
 
 function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
   const navigate = useNavigate();
   const { id } = useParams();
+
+  // Recherche du projet correspondant à l'ID
   const project = projects.find(p => p.id === id);
 
-  if (!project) {
-    return <div>Projet non trouvé</div>;
-  }
-
-  const [title, setTitle] = useState(project.title);
-  const [description, setDescription] = useState(project.description);
-  const [deadline, setDeadline] = useState(project.deadline || '');
+  // États pour gérer les données du projet
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [deadline, setDeadline] = useState('');
+  const [tasks, setTasks] = useState([]);
+  const [members, setMembers] = useState([]);
   const [newTask, setNewTask] = useState({ title: '', description: '' });
-  const [tasks, setTasks] = useState(project.tasks);
-  const [members, setMembers] = useState(project.members);
   const [newMember, setNewMember] = useState({
     name: '',
     role: 'member',
     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150'
   });
 
+  // Initialisation des états avec les données du projet
+  useState(() => {
+    if (project) {
+      setTitle(project.title);
+      setDescription(project.description);
+      setDeadline(project.deadline || '');
+      setTasks(project.tasks);
+      setMembers(project.members);
+    }
+  }, [project]);
+
+  // Affichage d'erreur si le projet n'est pas trouvé
+  if (!project) {
+    return <div>Projet non trouvé</div>;
+  }
+
+  /**
+   * Gère la soumission du formulaire de modification
+   * @param {Event} e - L'événement de soumission
+   */
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Créer l'objet projet mis à jour
     const updatedProject = {
       ...project,
       title,
@@ -35,16 +55,15 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
       deadline,
       tasks,
       members,
-      lastUpdated: new Date().toISOString(), // Ajouter un horodatage de mise à jour
+      lastUpdated: new Date().toISOString(),
     };
-
-    // Mettre à jour le projet
     onUpdate(updatedProject);
-
-    // Rediriger vers la page d'accueil
     navigate('/');
   };
 
+  /**
+   * Ajoute une nouvelle tâche au projet
+   */
   const handleAddTask = () => {
     if (newTask.title.trim()) {
       const task = {
@@ -59,6 +78,9 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
     }
   };
 
+  /**
+   * Ajoute un nouveau membre à l'équipe
+   */
   const handleAddMember = () => {
     if (newMember.name.trim()) {
       const member = {
@@ -76,14 +98,11 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
     }
   };
 
+ 
   const handleUpdateTaskStatus = (taskId, status) => {
     setTasks(tasks.map(task => 
       task.id === taskId ? { ...task, status } : task
     ));
-  };
-
-  const handleDeleteTask = (taskId) => {
-    setTasks(tasks.filter(task => task.id !== taskId));
   };
 
   const handleDeleteMember = (memberId) => {
@@ -94,23 +113,9 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
     })));
   };
 
-  const handleAssignTask = (taskId, memberId) => {
-    setTasks(tasks.map(task => {
-      if (task.id === taskId) {
-        const isAssigned = task.assignedTo.includes(memberId);
-        return {
-          ...task,
-          assignedTo: isAssigned
-            ? task.assignedTo.filter(id => id !== memberId)
-            : [...task.assignedTo, memberId]
-        };
-      }
-      return task;
-    }));
-  };
-
   return (
     <div className="home-container">
+      {/* En-tête avec titre et bouton */}
       <div className="header-section">
         <h1 className="page-title">Groupes de Travail</h1>
         <button className="new-project-button">
@@ -119,6 +124,7 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
         </button>
       </div>
 
+      {/* Section de recherche */}
       <div className="search-section">
         <div className="search-wrapper">
           <Search className="search-icon" size={20} />
@@ -130,6 +136,7 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
         </div>
       </div>
 
+      {/* Grille des projets */}
       <div className="project-grid">
         {projects.map((p) => (
           <div key={p.id} className="project-card">
@@ -139,8 +146,10 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
         ))}
       </div>
 
+      {/* Modal des détails du projet */}
       <div className="modal-overlay">
         <div className="modal-content">
+          {/* En-tête de la modal */}
           <div className="modal-header">
             <h2 className="modal-title">Détails du Projet</h2>
             <button onClick={onClose} className="close-button">
@@ -148,7 +157,9 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
             </button>
           </div>
 
+          {/* Formulaire de modification */}
           <form onSubmit={handleSubmit}>
+            {/* Champs principaux */}
             <div className="form-group">
               <label className="form-label">Titre</label>
               <input
@@ -180,8 +191,9 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
               />
             </div>
 
+            {/* Section des membres */}
             <div className="members-section">
-              <h3 className="section-title">Membres de l'équipe</h3>
+              <h3 className="section-title">Membres de l&apos;équipe</h3>
               <div className="member-list">
                 {members.map((member) => (
                   <div key={member.id} className="member-item">
@@ -205,6 +217,7 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
                 ))}
               </div>
 
+              {/* Formulaire d'ajout de membre */}
               <div className="add-member">
                 <input
                   type="text"
@@ -228,6 +241,7 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
               </div>
             </div>
 
+            {/* Section des tâches */}
             <div className="tasks-section">
               <h3 className="section-title">Tâches</h3>
               <div className="task-list">
@@ -250,6 +264,7 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
                 ))}
               </div>
 
+              {/* Formulaire d'ajout de tâche */}
               <div className="add-member">
                 <input
                   type="text"
@@ -265,6 +280,7 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
               </div>
             </div>
 
+            {/* Boutons d'action */}
             <div className="action-buttons">
               <button
                 type="button"
@@ -288,5 +304,31 @@ function ProjectDetails({ projects, onClose, onUpdate, onDelete }) {
     </div>
   );
 }
+
+// Validation des props avec PropTypes
+ProjectDetails.propTypes = {
+  projects: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+    deadline: PropTypes.string,
+    tasks: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      description: PropTypes.string,
+      status: PropTypes.string.isRequired,
+      assignedTo: PropTypes.arrayOf(PropTypes.string).isRequired
+    })).isRequired,
+    members: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      role: PropTypes.string.isRequired,
+      avatar: PropTypes.string.isRequired
+    })).isRequired
+  })).isRequired,
+  onClose: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired
+};
 
 export default ProjectDetails;

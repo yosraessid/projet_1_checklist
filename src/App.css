@@ -836,50 +836,73 @@ a:hover {
   color: var(--em-violet-dark);
 }
 
-/* Styles responsives */
+/**
+ * Styles Responsifs
+ * Organisation par points de rupture (breakpoints) :
+ * - Extra Large : 1400px et moins
+ * - Large : 1200px et moins
+ * - Medium : 900px et moins
+ * - Small : 768px et moins
+ * - Extra Small : 480px et moins
+ * - Très petit : 360px et moins
+ */
+
+/* Extra Large Devices (1400px et moins) */
 @media (max-width: 1400px) {
+  /* Ajustement du conteneur principal */
   .home-container {
     padding: 24px;
   }
 
+  /* Réduction du nombre de colonnes pour la grille de projets */
   .project-grid {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
   }
 }
 
+/* Large Devices (1200px et moins) */
 @media (max-width: 1200px) {
+  /* Passage à 2 colonnes pour la grille de projets */
   .project-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
 
+  /* Ajustement des marges du footer */
   .footer-content {
     padding: 0 20px;
   }
 }
 
+/* Medium Devices (900px et moins) */
 @media (max-width: 900px) {
-  .header-section {
+  /* Ajustements des espacements */
+  .header-section,
+  .search-section {
     padding: 0 16px;
   }
 
+  /* Optimisation de la recherche */
   .search-section {
-    padding: 0 16px;
     max-width: 100%;
   }
 
+  /* Réduction des espacements des cartes */
   .project-card {
     padding: 20px;
   }
 
+  /* Adaptation des métadonnées des projets */
   .project-meta {
     flex-wrap: wrap;
     gap: 16px;
   }
 }
 
+/* Small Devices (768px et moins) */
 @media (max-width: 768px) {
+  /* Ajustements de la navigation */
   nav {
     padding: 20px;
   }
@@ -888,6 +911,7 @@ a:hover {
     font-size: 18px;
   }
 
+  /* Réorganisation de l'en-tête */
   .header-section {
     flex-direction: column;
     gap: 16px;
@@ -898,30 +922,57 @@ a:hover {
     font-size: 24px;
   }
 
+  /* Adaptation du bouton de création */
   .new-project-button {
     width: 100%;
     justify-content: center;
   }
 
+  /* Passage à une colonne unique */
   .project-grid {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 0 16px;
   }
 
+  /* Ajustement des modales */
   .modal-content {
     width: 90%;
     padding: 20px;
   }
 
+  /* Réorganisation du footer */
   .footer-content {
     flex-direction: column;
     text-align: center;
     gap: 20px;
   }
+
+  /* Ajustements du footer */
+  .footer {
+    padding: 20px 0;
+  }
+
+  .footer-content {
+    padding: 0 16px;
+  }
+
+  .footer-brand h3 {
+    font-size: 16px;
+  }
+
+  .footer-brand p {
+    font-size: 13px;
+  }
+
+  .copyright {
+    font-size: 12px;
+  }
 }
 
+/* Extra Small Devices (480px et moins) */
 @media (max-width: 480px) {
+  /* Optimisation de la navigation */
   nav {
     padding: 16px;
   }
@@ -930,6 +981,7 @@ a:hover {
     font-size: 16px;
   }
 
+  /* Ajustement des boutons de navigation */
   .nav .buttons {
     gap: 8px;
   }
@@ -939,6 +991,7 @@ a:hover {
     font-size: 14px;
   }
 
+  /* Optimisation du menu utilisateur */
   .user-menu {
     gap: 6px;
   }
@@ -953,10 +1006,12 @@ a:hover {
     padding: 4px 8px;
   }
 
+  /* Réduction des espacements des cartes */
   .project-card {
     padding: 16px;
   }
 
+  /* Ajustement des typographies */
   .project-title {
     font-size: 16px;
   }
@@ -969,11 +1024,13 @@ a:hover {
     font-size: 12px;
   }
 
+  /* Optimisation des avatars */
   .member-avatar {
     width: 24px;
     height: 24px;
   }
 
+  /* Ajustement de la barre de recherche */
   .search-input {
     font-size: 14px;
     height: 36px;
@@ -984,6 +1041,7 @@ a:hover {
     height: 16px;
   }
 
+  /* Optimisation des modales */
   .modal-title {
     font-size: 18px;
   }
@@ -998,32 +1056,39 @@ a:hover {
     padding: 6px 10px;
   }
 
-  .footer {
-    padding: 16px 0;
+  /* Adaptation des boutons d'action */
+  .modal-actions {
+    flex-direction: column-reverse;
+    gap: 8px;
   }
 
-  .footer-brand h3 {
-    font-size: 16px;
+  .cancel-button,
+  .create-button {
+    width: 100%;
+    text-align: center;
   }
 
-  .footer-brand p,
-  .copyright {
-    font-size: 12px;
+  /* Ajustement du padding des modales */
+  .new-project-modal {
+    padding: 16px;
   }
 }
 
-/* Pour les très petits écrans */
+/* Very Small Devices (360px et moins) */
 @media (max-width: 360px) {
+  /* Optimisation maximale des boutons */
   .nav .buttons button {
     padding: 4px 8px;
     font-size: 13px;
   }
 
+  /* Réorganisation des métadonnées */
   .project-meta {
     flex-direction: column;
     gap: 12px;
   }
 
+  /* Réduction du padding des modales */
   .modal-content {
     padding: 16px;
   }

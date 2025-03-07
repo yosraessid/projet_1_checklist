@@ -1,8 +1,20 @@
+
 import { useState } from 'react';
 import { X } from 'lucide-react';
+import PropTypes from 'prop-types';
 import '../App.css';
 
+
 function RegisterModal({ onClose, onRegister }) {
+  /**
+   * État local pour gérer les données du formulaire
+   * @type {{
+   *   name: string,
+   *   email: string,
+   *   password: string,
+   *   confirmPassword: string
+   * }}
+   */
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -10,6 +22,7 @@ function RegisterModal({ onClose, onRegister }) {
     confirmPassword: ''
   });
 
+ 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (formData.password !== formData.confirmPassword) {
@@ -18,6 +31,7 @@ function RegisterModal({ onClose, onRegister }) {
     }
     onRegister(formData);
   };
+
 
   const handleChange = (e) => {
     setFormData({
@@ -29,14 +43,17 @@ function RegisterModal({ onClose, onRegister }) {
   return (
     <div className="modal-overlay">
       <div className="register-modal">
+        {/* En-tête de la modale */}
         <div className="modal-header">
-          <h2 className="modal-title">S'inscrire</h2>
+          <h2 className="modal-title">S&apos;inscrire</h2>
           <button onClick={onClose} className="close-button">
             <X size={20} />
           </button>
         </div>
 
+        {/* Formulaire d'inscription */}
         <form onSubmit={handleSubmit} className="register-form">
+          {/* Champ nom complet */}
           <div className="form-group">
             <label className="form-label">Nom complet</label>
             <input
@@ -50,6 +67,7 @@ function RegisterModal({ onClose, onRegister }) {
             />
           </div>
 
+          {/* Champ email */}
           <div className="form-group">
             <label className="form-label">Email</label>
             <input
@@ -63,6 +81,7 @@ function RegisterModal({ onClose, onRegister }) {
             />
           </div>
 
+          {/* Champ mot de passe */}
           <div className="form-group">
             <label className="form-label">Mot de passe</label>
             <input
@@ -76,6 +95,7 @@ function RegisterModal({ onClose, onRegister }) {
             />
           </div>
 
+          {/* Champ confirmation mot de passe */}
           <div className="form-group">
             <label className="form-label">Confirmer le mot de passe</label>
             <input
@@ -89,12 +109,13 @@ function RegisterModal({ onClose, onRegister }) {
             />
           </div>
 
+          {/* Boutons d'action */}
           <div className="modal-actions">
             <button type="button" onClick={onClose} className="cancel-button">
               Annuler
             </button>
             <button type="submit" className="register-button">
-              S'inscrire
+              S&apos;inscrire
             </button>
           </div>
         </form>
@@ -102,5 +123,11 @@ function RegisterModal({ onClose, onRegister }) {
     </div>
   );
 }
+
+// Validation des props avec PropTypes
+RegisterModal.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  onRegister: PropTypes.func.isRequired
+};
 
 export default RegisterModal; 

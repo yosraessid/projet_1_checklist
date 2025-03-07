@@ -1,31 +1,46 @@
-// Navbar.jsx
+
+
 import { useState, useEffect } from 'react';
 import { Users } from 'lucide-react';
 import LoginModal from './LoginModal';
 import RegisterModal from './RegisterModal';
 import '../App.css';
 
+
 const Navbar = () => {
+  /**
+   * États pour gérer l'affichage des modales
+   */
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
   
-  // Initialiser l'état de connexion depuis localStorage
+  /**
+   * État de connexion persistant
+   * Initialisation depuis localStorage pour maintenir la session
+   */
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
     return localStorage.getItem('isLoggedIn') === 'true';
   });
   
-  // Initialiser les données utilisateur depuis localStorage
+  /**
+   * État des données utilisateur
+   * Initialisation depuis localStorage pour restaurer le profil
+   */
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
-  // Sauvegarder l'état de connexion dans localStorage
+  /**
+   * Effet pour synchroniser l'état de connexion avec localStorage
+   */
   useEffect(() => {
     localStorage.setItem('isLoggedIn', isLoggedIn);
   }, [isLoggedIn]);
 
-  // Sauvegarder les données utilisateur dans localStorage
+  /**
+   * Effet pour synchroniser les données utilisateur avec localStorage
+   */
   useEffect(() => {
     if (user) {
       localStorage.setItem('user', JSON.stringify(user));
@@ -34,7 +49,10 @@ const Navbar = () => {
     }
   }, [user]);
 
-  // Tableau d'avatars disponibles
+  /**
+   * Collection d'avatars disponibles pour les utilisateurs de démonstration
+   * Associe chaque email à une image de profil spécifique
+   */
   const avatars = {
     'marie.laurent@email.com': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150',
     'thomas.martin@email.com': 'https://images.unsplash.com/photo-1599566150163-29194dcaad36?w=150',
@@ -42,8 +60,9 @@ const Navbar = () => {
     'default': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150'
   };
 
+  
+
   const handleLogin = (credentials) => {
-    // Sélectionner l'avatar correspondant à l'email ou utiliser l'avatar par défaut
     const userAvatar = avatars[credentials.email] || avatars.default;
     
     const mockUser = {
@@ -56,8 +75,9 @@ const Navbar = () => {
     setIsLoginModalOpen(false);
   };
 
+ 
+  
   const handleRegister = (userData) => {
-    // Utiliser l'avatar correspondant à l'email ou l'avatar par défaut
     const userAvatar = avatars[userData.email] || avatars.default;
     
     const newUser = {
@@ -70,6 +90,10 @@ const Navbar = () => {
     setIsRegisterModalOpen(false);
   };
 
+  /**
+   * Gère la déconnexion de l'utilisateur
+   * Réinitialise les états et supprime les données de localStorage
+   */
   const handleLogout = () => {
     setUser(null);
     setIsLoggedIn(false);
@@ -79,10 +103,13 @@ const Navbar = () => {
 
   return (
     <nav>
+      {/* Logo et nom de l'application */}
       <div className="logo">
         <Users className="h-8 w-8 text-indigo-600" />
         MultimédiaTeams
       </div>
+
+      {/* Boutons d'authentification ou menu utilisateur */}
       <div className="buttons">
         {isLoggedIn ? (
           <div className="user-menu">
@@ -94,11 +121,12 @@ const Navbar = () => {
         ) : (
           <>
             <button onClick={() => setIsLoginModalOpen(true)}>Se connecter</button>
-            <button onClick={() => setIsRegisterModalOpen(true)}>S'inscrire</button>
+            <button onClick={() => setIsRegisterModalOpen(true)}>S&apos;inscrire</button>
           </>
         )}
       </div>
 
+      {/* Modales de connexion et d'inscription */}
       {isLoginModalOpen && (
         <LoginModal
           onClose={() => setIsLoginModalOpen(false)}
